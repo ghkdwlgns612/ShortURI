@@ -17,4 +17,13 @@ public class GlobalExceptionHandler {
                     .errmsg(e.getMessage())
                     .build();
     }
+
+    @ExceptionHandler(value =IllegalArgumentException.class)
+    public ErrorResponse handlerDuplicateUri(Exception e) {
+            return ErrorResponse.builder()
+                    .message("중복된 URI가 존재합니다. 조회 기능을 사용하세요.")
+                    .statusCode(HttpStatus.NOT_ACCEPTABLE.value())
+                    .errmsg(e.getMessage())
+                    .build();
+    }
 }

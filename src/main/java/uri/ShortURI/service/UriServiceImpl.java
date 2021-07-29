@@ -1,5 +1,6 @@
 package uri.ShortURI.service;
 
+import org.hibernate.DuplicateMappingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -9,6 +10,7 @@ import uri.ShortURI.controller.uri.dto.uri.UriResponsDto;
 import uri.ShortURI.repository.UriRepository;
 import uri.ShortURI.utils.GetBuildUtils;
 
+import java.util.DuplicateFormatFlagsException;
 import java.util.Optional;
 
 @Service
@@ -40,11 +42,11 @@ public class UriServiceImpl implements UriService{
                 .originuri(origin)
                 .changeduri(changeUri(origin))
                 .build();
-        if (uriRepository.findByOrigin(uri.getOriginuri()) == null)
+
+        System.out.println(uriRepository.findByOrigin(uri.getOriginuri()));
+        if (uriRepository.findByOrigin(uri.getOriginuri()).isEmpty())
             uriRepository.save(uri);
-        else {
-            return getBuildUtils.getBuild(0L, origin.toString(), "중복되는 URI가 존재합니다.");
-        }
+        else {throw new IllegalArgumentException();}
         UriResponsDto uriResponsDto = getBuildUtils.getBuild(uri);
         return uriResponsDto;
     }

@@ -6,9 +6,15 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
-@Builder
 public class ResultResponseDto<T> {
     private Integer statusCode;
     private String message;
     private T data;
+
+    @Builder
+    public ResultResponseDto(Integer statusCode, String message, T data) {
+        this.statusCode = statusCode;
+        this.message = message;
+        this.data = data;
+    }
 }

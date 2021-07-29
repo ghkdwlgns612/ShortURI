@@ -11,6 +11,7 @@ import javax.persistence.*;
 @NoArgsConstructor
 @Table(name = "URISTORE")
 @Getter
+@Builder
 public class Uri {
     @Id
     @Column
@@ -21,11 +22,4 @@ public class Uri {
     @Column(nullable = false)
     private String changeduri;
 
-    @Builder
-
-    public Uri(Long id, String originuri, String changeduri) {
-        this.id = id;
-        this.originuri = originuri;
-        this.changeduri = changeduri;
-    }
 }

@@ -1,8 +1,7 @@
 package uri.ShortURI.repository;
 
 import uri.ShortURI.domain.Uri;
-import uri.ShortURI.domain.UriRequestDto;
-import uri.ShortURI.domain.UriResponsDto;
+import uri.ShortURI.controller.uri.dto.uri.UriRequestDto;
 
 import java.util.Optional;
 

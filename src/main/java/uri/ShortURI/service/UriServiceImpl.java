@@ -4,9 +4,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import uri.ShortURI.domain.Uri;
-import uri.ShortURI.domain.UriRequestDto;
-import uri.ShortURI.domain.UriResponsDto;
+import uri.ShortURI.controller.uri.dto.uri.UriRequestDto;
+import uri.ShortURI.controller.uri.dto.uri.UriResponsDto;
 import uri.ShortURI.repository.UriRepository;
+import uri.ShortURI.utils.GetBuildUtils;
 
 import java.util.Optional;
 
@@ -15,27 +16,22 @@ import java.util.Optional;
 public class UriServiceImpl implements UriService{
 
     private final UriRepository uriRepository;
+    private final GetBuildUtils getBuildUtils;
+
 
     @Autowired
-    public UriServiceImpl(UriRepository uriRepository) {
+    public UriServiceImpl(UriRepository uriRepository, GetBuildUtils getBuildUtils) {
         this.uriRepository = uriRepository;
+        this.getBuildUtils = getBuildUtils;
     }
 
     @Override
     public UriResponsDto findByOrigin(String origin) {
         Optional<Uri> uri = uriRepository.findByOrigin(origin.toString());
         if (uri == null)
-            return UriResponsDto.builder()
-                    .id(0L)
-                    .originuri(origin.toString())
-                    .changeduri("일치하는 URI가 존재하지 않습니다.")
-                    .build();
+            return getBuildUtils.getBuild(0L, origin.toString(), "일치하는 URI가 존재하지 않습니다.");
         else
-            return UriResponsDto.builder()
-                    .id(uri.get().getId())
-                    .originuri(uri.get().getOriginuri())
-                    .changeduri(uri.get().getChangeduri())
-                    .build();
+            return getBuildUtils.getBuild(uri);
     }
 
     @Override
@@ -44,16 +40,16 @@ public class UriServiceImpl implements UriService{
                 .originuri(origin)
                 .changeduri(changeUri(origin))
                 .build();
-
-        uriRepository.save(uri);
-
-        UriResponsDto uriResponsDto = UriResponsDto.builder()
-                .id(uri.getId())
-                .originuri(uri.getOriginuri())
-                .changeduri(uri.getChangeduri())
-                .build();
+        if (uriRepository.findByOrigin(uri.getOriginuri()) == null)
+            uriRepository.save(uri);
+        else {
+            return getBuildUtils.getBuild(0L, origin.toString(), "중복되는 URI가 존재합니다.");
+        }
+        UriResponsDto uriResponsDto = getBuildUtils.getBuild(uri);
         return uriResponsDto;
     }
+
+
 
     private String changeUri(String origin) {
         String BASE62_CHAR = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";

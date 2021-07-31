@@ -5,13 +5,11 @@ import lombok.Getter;
 
 @Getter
 public class UriResponseDto {
-    private Long seq;
     private String originUri;
     private String changedUri;
 
     @Builder
-    public UriResponseDto(Long seq, String originUri, String changedUri) {
-        this.seq = seq;
+    public UriResponseDto(String originUri, String changedUri) {
         this.originUri = originUri;
         this.changedUri = changedUri;
     }

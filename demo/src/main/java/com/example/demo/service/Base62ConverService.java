@@ -47,7 +47,7 @@ public class Base62ConverService {
             mul *= base;
         }
         base10 -= default_plus;
-        String res = "http://localhost:8080/sa/" + base10;
+        String res = String.valueOf(base10);
         return res;
     }
 }

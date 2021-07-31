@@ -1,33 +1,24 @@
-uri/ShortURI/repository/UriRepositoryImpl.java
- uri.ShortURI.repository.UriRepositoryImpl
-uri/ShortURI/Application.java
- uri.ShortURI.Application
-uri/ShortURI/controller/uri/dto/uri/UriRequestDto.java
- uri.ShortURI.controller.uri.dto.uri.UriRequestDto
- uri.ShortURI.controller.uri.dto.uri.UriRequestDto$UriRequestDtoBuilder
-uri/ShortURI/controller/uri/dto/uri/UriResponsDto.java
- uri.ShortURI.controller.uri.dto.uri.UriResponsDto
- uri.ShortURI.controller.uri.dto.uri.UriResponsDto$UriResponsDtoBuilder
-uri/ShortURI/service/UriService.java
- uri.ShortURI.service.UriService
-uri/ShortURI/domain/Uri.java
- uri.ShortURI.domain.Uri
- uri.ShortURI.domain.Uri$UriBuilder
-uri/ShortURI/utils/GetBuildUtils.java
- uri.ShortURI.utils.GetBuildUtils
-uri/ShortURI/controller/error/dto/ErrorResponse.java
- uri.ShortURI.controller.error.dto.ErrorResponse
- uri.ShortURI.controller.error.dto.ErrorResponse$ErrorResponseBuilder
-uri/ShortURI/controller/uri/ApiController.java
- uri.ShortURI.controller.uri.ApiController
-uri/ShortURI/controller/uri/dto/result/ResultResponseDto.java
- uri.ShortURI.controller.uri.dto.result.ResultResponseDto
- uri.ShortURI.controller.uri.dto.result.ResultResponseDto$ResultResponseDtoBuilder
+uri/ShortURI/controller/UriController.java
+ uri.ShortURI.controller.UriController
 uri/ShortURI/repository/UriRepository.java
  uri.ShortURI.repository.UriRepository
-uri/ShortURI/SpringConfig.java
- uri.ShortURI.SpringConfig
-uri/ShortURI/controller/error/GlobalExceptionHandler.java
- uri.ShortURI.controller.error.GlobalExceptionHandler
-uri/ShortURI/service/UriServiceImpl.java
- uri.ShortURI.service.UriServiceImpl
+uri/ShortURI/controller/dto/UriResponseDto.java
+ uri.ShortURI.controller.dto.UriResponseDto
+ uri.ShortURI.controller.dto.UriResponseDto$UriResponseDtoBuilder
+uri/ShortURI/error/GlobalExceptionHandler.java
+ uri.ShortURI.error.GlobalExceptionHandler
+uri/ShortURI/Application.java
+ uri.ShortURI.Application
+uri/ShortURI/controller/dto/ResultResponseDto.java
+ uri.ShortURI.controller.dto.ResultResponseDto
+ uri.ShortURI.controller.dto.ResultResponseDto$ResultResponseDtoBuilder
+uri/ShortURI/service/Base62ConverService.java
+ uri.ShortURI.service.Base62ConverService
+uri/ShortURI/error/dto/ErrorResponse.java
+ uri.ShortURI.error.dto.ErrorResponse
+ uri.ShortURI.error.dto.ErrorResponse$ErrorResponseBuilder
+uri/ShortURI/service/UriService.java
+ uri.ShortURI.service.UriService
+uri/ShortURI/entity/Uri.java
+ uri.ShortURI.entity.Uri
+ uri.ShortURI.entity.Uri$UriBuilder

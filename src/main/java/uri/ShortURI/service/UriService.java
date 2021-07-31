@@ -6,7 +6,7 @@ import org.apache.commons.validator.routines.UrlValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import uri.ShortURI.controller.dto.UriResponseDto;
-import uri.ShortURI.entity.Uri;
+import uri.ShortURI.domain.Uri;
 import uri.ShortURI.repository.UriRepository;
 
 import javax.xml.bind.ValidationException;
@@ -42,12 +42,26 @@ public class UriService {
             originUri = "https://" + originUri;
         if (checkUri(originUri) == false) //SCHEME없으면 인증이 안되기 때문에 앞에서 확인해줌.
             throw new ValidationException(originUri);
-        Uri uri = Uri.builder().originuri(originUri).changeduri(convertService.change(originUri)).build();
+        Long originNum = creatOriginNum(originUri); //URI 숫자 변경 후 난수발생.
+        Uri uri = Uri.builder().
+                originuri(originUri).
+                changeduri(convertService.toBase62(originNum)).
+                build();
+        log.info(uri.getOriginuri());
+        log.info(uri.getChangeduri());
         uriRepository.save(uri);
         return UriResponseDto.builder()
                     .changedUri(uri.getChangeduri())
                     .originUri(uri.getOriginuri())
                     .build();
+    }
+
+    private Long creatOriginNum(String originUri) {
+        Long originNum = 0L;
+        int i = 0;
+        while (i < originUri.length())
+            originNum += originUri.charAt(i++) + (int)(Math.random() * 1000000);
+        return originNum;
     }
 
     private boolean checkUri(String originUri) {

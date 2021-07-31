@@ -37,7 +37,6 @@ public class UriController {
         log.info("success");
         UriResponseDto uriResponseDto = uriService.changeUri(originuri);
         model.addAttribute("result", uriResponseDto);
-        response.setHeader("Access-Control-Allow-Origin", "http://127.0.0.1:5501");
        return ResultResponseDto.builder()
                 .statusCode(HttpStatus.OK.value())
                 .message(HttpStatus.OK.name())

@@ -19,34 +19,15 @@ public class Base62ConverService {
 
     private static final int base = 62;
 
-    //base10은 db의 id값, base62는 db의 주어진 id값을 62진수로 변환한 것
-
     String toBase62(long base10){ //encoding
-
         StringBuilder base62 = new StringBuilder();
         base10 += default_plus;
-        int mod;
-        do{
+        int mod = 0;
+        while(base10 != 0) {
             mod = (int) base10 % base;
             base62.append(elements[mod]);
-        }while((base10 = base10/ base) != 0);
-
-        return base62.reverse().toString();
-    }
-
-    String change(String base62){ //decoding
-        long mul = 1;
-        long base10 =0;
-        int pos;
-
-        log.info(String.valueOf(base10));
-        for(int i=base62.length()-1; i>=0; i--){
-            pos = Arrays.asList(elements).indexOf(base62.substring(i, i+1));
-            base10 += (long) pos*mul;
-            mul *= base;
+            base10 /= base;
         }
-        base10 -= default_plus;
-        String res = String.valueOf(base10);
-        return res;
+        return base62.reverse().toString();
     }
 }

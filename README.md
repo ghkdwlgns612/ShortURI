@@ -84,3 +84,11 @@ IDE환경에서 직접 Main문 Run실행.
 
 ### 실행결과
 
+**<URI 변환>**
+
+![news](https://user-images.githubusercontent.com/68694844/127809391-2704055b-7657-428c-a23e-037203e2aa93.gif)
+
+**<변환 후 접속>**
+
+![news111](https://user-images.githubusercontent.com/68694844/127809795-0875c4a2-720f-4155-b552-30f3bd039aa1.gif)
+

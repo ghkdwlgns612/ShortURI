@@ -88,7 +88,9 @@ IDE환경에서 직접 Main문 Run실행.
 
 ![news](https://user-images.githubusercontent.com/68694844/127809391-2704055b-7657-428c-a23e-037203e2aa93.gif)
 
+
+
 **<변환 후 접속>**
 
-![news111](https://user-images.githubusercontent.com/68694844/127809795-0875c4a2-720f-4155-b552-30f3bd039aa1.gif)
+![nesnew](https://user-images.githubusercontent.com/68694844/127810372-9a1e2243-759a-4f58-8a56-f83eac05171b.gif)
 

@@ -1,0 +1,6 @@
+uri/ShortURI/ShortUriApplicationTests.java
+ uri.ShortURI.ShortUriApplicationTests
+uri/ShortURI/RepositoryTest.java
+ uri.ShortURI.RepositoryTest
+uri/ShortURI/Base64Test.java
+ uri.ShortURI.Base64Test

@@ -1,6 +1,8 @@
 package uri.ShortURI;
 
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Base64Test {
 
@@ -14,17 +16,29 @@ public class Base64Test {
 
     public static void main(String[] args) {
         String str = "abcd";
+        int N = str.length();
+        int cnt = 0;
+        char[][] res = new char[N][8];
         for(int j=0;j<str.length();j++)
         {
             int a = str.charAt(j);
-            String res = "";
-            for (int i = 1; i <129 ; i *= 2) {
-                if ((a % i) == 1)
-                    System.out.print("1");
+            for (int i = 128; i > 0 ; i /= 2)
+            {
+                if ((i & a) != 0)
+                    res[j][cnt] = '1';
                 else
-                    System.out.print("0");
+                    res[j][cnt] = '0';
+                cnt++;
             }
-            System.out.println("");
+            cnt = 0;
+        }
+
+        for(int j=0;j<str.length();j++)
+        {
+            for (int i = 128; i > 0 ; i /= 2)
+            {
+                cnt++;
+            }
         }
     }
 }

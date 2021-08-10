@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="uri.ShortURI.Base64Test" tests="1" skipped="0" failures="0" errors="0" timestamp="2021-08-10T01:13:54" hostname="LAPTOP-N1HNO2EV" time="0.064">
+  <properties/>
+  <testcase name="Base62Test()" classname="uri.ShortURI.Base64Test" time="0.064"/>
+  <system-out><![CDATA[10:13:54.025 [Test worker] INFO uri.ShortURI.utils.Base62ConverService - Cut str 79ee6cf582f
+10:13:54.033 [Test worker] INFO uri.ShortURI.utils.Base62ConverService - Binary str 1111001111011100110110011110101100000101111
+a = YZPzWMx
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

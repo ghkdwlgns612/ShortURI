@@ -1,6 +1,10 @@
-uri/ShortURI/ShortUriApplicationTests.java
- uri.ShortURI.ShortUriApplicationTests
-uri/ShortURI/RepositoryTest.java
- uri.ShortURI.RepositoryTest
 uri/ShortURI/Base64Test.java
  uri.ShortURI.Base64Test
+uri/ShortURI/RepositoryTest.java
+ uri.ShortURI.RepositoryTest
+uri/ShortURI/ShortUriApplicationTests.java
+ uri.ShortURI.ShortUriApplicationTests
+uri/ShortURI/Encoder.java
+ uri.ShortURI.Encoder
+uri/ShortURI/Hashing.java
+ uri.ShortURI.Hashing

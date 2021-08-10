@@ -7,5 +7,7 @@ import java.sql.ResultSet;
 import java.util.Optional;
 
 public interface UriRepository extends JpaRepository<Uri,Long> { //Spring JPA를 사용하여 기본적인 기능 제공받음.
-    Optional<Uri> findBychangeduri(String changeduri);
+    Optional<Uri> findByChangedUri(String changedUri);
+
+    Optional<Uri> findByOriginUri(String originUri);
 }

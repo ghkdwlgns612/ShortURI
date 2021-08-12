@@ -28,7 +28,6 @@ public class UrlService {
     private UrlRepository urlRepository;
     private Base62Converter base62Converter = new Base62Converter();
     private Sha512Converter sha512Converter = new Sha512Converter();
-    private static BigInteger bigInteger = new BigInteger("0");
     private static List<String> urlList = new ArrayList<>();
 
     @Autowired
@@ -45,7 +44,7 @@ public class UrlService {
 
     public UrlResponseDto createUrl(String originUrl) throws NoSuchAlgorithmException, ValidationException {
         originUrl = checkUrl(originUrl);
-        BigInteger id = bigInteger.add(BigInteger.valueOf(1));
+        BigInteger id = urlRepository.findTop;
         String convertedBySha512 = sha512Converter.convert512(id.toString());
         String extract10Char = randomPick10(convertedBySha512);
         while(urlRepository.existsByhashvalue(extract10Char))

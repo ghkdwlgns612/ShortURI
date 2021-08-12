@@ -4,6 +4,7 @@ import com.example.demo.domain.Url;
 import com.example.demo.repository.UrlRepository;
 import com.example.demo.utils.Base62Converter;
 import com.example.demo.utils.Sha512Converter;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -16,6 +17,7 @@ import java.security.NoSuchAlgorithmException;
 import java.util.List;
 import java.util.Optional;
 
+
 @SpringBootTest
 class ShortenApplicationTests {
 
@@ -26,10 +28,20 @@ class ShortenApplicationTests {
 	private Base62Converter base62Converter = new Base62Converter();
 
 	@Test
-	public void Base62Test() {
+	public void getId() {
+		Url url = new Url("asdmsa","ASdoajdas");
+		System.out.println(url.getId());
+	}
+
+	@Test
+	public void Base62EncodingTest() {
 		String encode = base62Converter.encoding("123456789a");
 		System.out.println("encode = " + encode);
-		String decode = base62Converter.decoding(encode);
+	}
+
+	@Test
+	public void Base62DecodingTest() {
+		String decode = base62Converter.decoding("abcdefg");
 		System.out.println("decode = " + decode);
 	}
 

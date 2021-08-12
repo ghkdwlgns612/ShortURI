@@ -17,7 +17,7 @@ public class Base62Converter {
         BigInteger base10 = new BigInteger(extract10Char,16);
         StringBuilder result = new StringBuilder();
         while (base10 != BigInteger.valueOf(0)) {
-            BigInteger tmp = new BigInteger(String.valueOf(base10.mod(BigInteger.valueOf(62))));
+            BigInteger tmp = get62BaseString(base10);
             result.append(base62[Integer.parseInt(tmp.toString())]);
             base10 = base10.divide(BigInteger.valueOf(62));
         }
@@ -27,11 +27,20 @@ public class Base62Converter {
     public String decoding(String encodedStr) {
         double result = 0.0;
         for(int i = 0;i < encodedStr.length();i++) {
-            double res = Arrays.asList(base62).indexOf(encodedStr.substring(i,i+1)) * Math.pow(62.0, (double) (encodedStr.length() - 1 - i));;
+            double res = get10BaseNumber(encodedStr, i);
             result += res;
         }
-        System.out.println("result = " + result);
         BigInteger bigInteger = BigDecimal.valueOf(result).toBigInteger();
         return bigInteger.toString(16);
+    }
+
+    private BigInteger get62BaseString(BigInteger base10) {
+        BigInteger tmp = new BigInteger(String.valueOf(base10.mod(BigInteger.valueOf(62))));
+        return tmp;
+    }
+
+    private double get10BaseNumber(String encodedStr, int i) {
+        return Arrays.asList(base62).
+                indexOf(encodedStr.substring(i, i + 1)) * Math.pow(62.0, (double) (encodedStr.length() - 1 - i));
     }
 }

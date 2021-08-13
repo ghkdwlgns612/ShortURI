@@ -1,14 +1,19 @@
 package com.example.demo;
 
 import com.example.demo.domain.Url;
+import com.example.demo.dto.UrlResponseDto;
 import com.example.demo.repository.UrlRepository;
+import com.example.demo.service.UrlService;
 import com.example.demo.utils.Base62Converter;
 import com.example.demo.utils.Sha512Converter;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import javax.xml.bind.ValidationException;
 import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
 import java.net.URLEncoder;
@@ -20,42 +25,46 @@ import java.util.Optional;
 
 @SpringBootTest
 class ShortenApplicationTests {
+	Logger log = (Logger) LoggerFactory.getLogger(ShortenApplicationTests.class);
 
 	@Autowired
 	private UrlRepository urlRepository;
+	@Autowired
+	private UrlService urlService;
 
 	private Sha512Converter sha512Converter = new Sha512Converter();
 	private Base62Converter base62Converter = new Base62Converter();
 
 	@Test
-	public void getId() {
-		Url url = new Url("asdmsa","ASdoajdas");
-		System.out.println(url.getId());
+	public void getCreateInfoTest() throws ValidationException, NoSuchAlgorithmException {
+		UrlResponseDto url = urlService.createUrl("daum.net");
+		log.info(url.getOriginUrl());
+		log.info(url.getHashValue());
 	}
 
 	@Test
 	public void Base62EncodingTest() {
 		String encode = base62Converter.encoding("123456789a");
-		System.out.println("encode = " + encode);
+		log.info(encode);
 	}
 
 	@Test
 	public void Base62DecodingTest() {
 		String decode = base62Converter.decoding("abcdefg");
-		System.out.println("decode = " + decode);
+		log.info(decode);
 	}
 
 	@Test
 	public void Sha512Test() throws NoSuchAlgorithmException {
 		BigInteger bigInteger = new BigInteger("12");
 		String res = sha512Converter.convert512(bigInteger.toString());
-		System.out.println("res = " + res);
+		log.info(res);
 	}
 
 	@Test
 	public void UrlRepoTest() {
 		boolean res = urlRepository.existsByhashvalue("3445678");
-		System.out.println("res = " + res);
+		log.info(String.valueOf(res));
 	}
 
 	@Test
@@ -70,14 +79,14 @@ class ShortenApplicationTests {
 	public void CreateV2Test() throws UnsupportedEncodingException {
 		String naver  = "https://naver.com/login";
 		String encode = URLEncoder.encode(naver, "UTF-8");
-		System.out.println("encode = " + encode);
+		log.info(encode);
 	}
 
 
 	@Test
 	public void FindByChangeUrlTest() {
 		Optional<Url> result = urlRepository.findByhashvalue("345678");
-		System.out.println("result.get().getOriginuri() = " + result.get().getOriginurl());
-		System.out.println("result.get().getchangeduri() = " + result.get().getHashvalue());
+		log.info(result.get().getOriginurl());
+		log.info(result.get().getHashvalue());
 	}
 }

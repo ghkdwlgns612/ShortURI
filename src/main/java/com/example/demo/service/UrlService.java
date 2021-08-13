@@ -4,6 +4,7 @@ import com.example.demo.domain.Url;
 import com.example.demo.dto.UrlResponseDto;
 import com.example.demo.repository.UrlRepository;
 import com.example.demo.utils.Base62Converter;
+import com.example.demo.utils.MakeDto;
 import com.example.demo.utils.Sha512Converter;
 import javassist.NotFoundException;
 import lombok.extern.slf4j.Slf4j;
@@ -26,69 +27,78 @@ import java.util.Optional;
 public class UrlService {
 
     private UrlRepository urlRepository;
+    private UrlCheckService urlCheckService;
+    private MakeDto makeDto;
     private Base62Converter base62Converter = new Base62Converter();
     private Sha512Converter sha512Converter = new Sha512Converter();
-    private static List<String> urlList = new ArrayList<>();
 
     @Autowired
-    public UrlService(UrlRepository urlRepository) {
+    public UrlService(UrlRepository urlRepository, UrlCheckService urlCheckService, MakeDto makeDto) {
         this.urlRepository = urlRepository;
+        this.urlCheckService = urlCheckService;
+        this.makeDto = makeDto;
     }
 
-    public UrlResponseDto findByHashValue(String encodedValue) throws Exception {
+    public UrlResponseDto findByHashValue(String encodedValue) throws Exception { //인코딩 된 값을 디코딩하여 DB에서 찾아 바로 리다이렉트
         String decodedValue = base62Converter.decoding(encodedValue);
-        log.info("Decoded Value {}",decodedValue);
         Optional<Url> result = urlRepository.findByhashvalue(decodedValue);
-        return isEmpty(encodedValue, result);
+        return urlCheckService.isEmpty(encodedValue, result);
     }
 
     public UrlResponseDto createUrl(String originUrl) throws NoSuchAlgorithmException, ValidationException {
-        originUrl = checkUrl(originUrl);
-        BigInteger id = urlRepository.findTop;
+        originUrl = urlCheckService.checkUrl(originUrl);
+        Url url = new Url(null,originUrl);
+        urlRepository.save(url); //원래 List를 했으나 프로그램 종료 시 꼬일 수 있기 때문에 ID를 얻기 위해서 처음 save를 해줌. 
+        BigInteger id = url.getId();
         String convertedBySha512 = sha512Converter.convert512(id.toString());
+        String extract10Char = pickRandom10Char(convertedBySha512);
+        url.setHashvalue(extract10Char);
+        urlRepository.save(url); //Hashing Value를 정한 후 다시 업데이트.
+        String encodedStr = base62Converter.encoding(extract10Char);
+        return makeDto.makeUrlResponseDto(originUrl, extract10Char, encodedStr);
+    }
+
+
+    public UrlResponseDto createUrlWithLogin(String originUrl) throws NoSuchAlgorithmException, ValidationException, UnsupportedEncodingException {
+        originUrl = urlCheckService.checkUrl(originUrl);
+        originUrl = originUrl.toLowerCase();
+        String extract10Char = makeExtract10Char(originUrl);
+        Url url = new Url(extract10Char,originUrl);
+        urlRepository.save(url);
+        String encodedStr = base62Converter.encoding(extract10Char);
+        return makeDto.makeUrlResponseDto(originUrl, extract10Char, encodedStr);
+    }
+
+    /**
+     * UTF-8인코딩 -> 512SHA -> 0 ~ 10자르기를 통해 10개의 16진수문자를 추출함.
+     * **/
+    private String makeExtract10Char(String originUrl) throws UnsupportedEncodingException, NoSuchAlgorithmException {
+        String encodedUtf8 = URLEncoder.encode(originUrl, "UTF-8");
+        String convertedBySha512 = sha512Converter.convert512(encodedUtf8);
+        String extract10Char = makeFront10Char(originUrl, convertedBySha512);
+        return extract10Char;
+    }
+
+    /**
+     * originUrl을 해싱한 16진수 64글자 중 앞의 10글자를 추출함.
+     */
+    private String makeFront10Char(String originUrl, String convertedBySha512) {
+        String extract10Char = convertedBySha512.substring(0,10);
+        if(urlRepository.existsByhashvalue(extract10Char))
+            throw new DuplicateKeyException(originUrl);
+        return extract10Char;
+    }
+
+    /**
+     * id를 해싱한 16진수 64글자 중 랜덤 10문자를 뽑아내 40비트를 생성.
+     * **/
+    private String pickRandom10Char(String convertedBySha512) {
         String extract10Char = randomPick10(convertedBySha512);
         while(urlRepository.existsByhashvalue(extract10Char))
             extract10Char = randomPick10(convertedBySha512);
-        Url url = new Url(extract10Char,originUrl);
-        urlRepository.save(url);
-        String encodedStr = base62Converter.encoding(extract10Char);
-        return UrlResponseDto.builder()
-                .originUrl(originUrl)
-                .encodedValue(encodedStr)
-                .hashValue(extract10Char)
-                .build();
+        return extract10Char;
     }
 
-    public UrlResponseDto createUrlWithLogin(String originUrl) throws NoSuchAlgorithmException, ValidationException, UnsupportedEncodingException {
-        originUrl = checkUrl(originUrl);
-        String encodedUtf8 = URLEncoder.encode(originUrl, "UTF-8");
-        String convertedBySha512 = sha512Converter.convert512(encodedUtf8);
-        String extract10Char = convertedBySha512.substring(0,10);
-        if(urlList.indexOf(extract10Char) != -1)
-            throw new DuplicateKeyException(originUrl);
-        urlList.add(extract10Char);
-        Url url = new Url(extract10Char,originUrl);
-        urlRepository.save(url);
-        String encodedStr = base62Converter.encoding(extract10Char);
-        return UrlResponseDto.builder()
-                .originUrl(originUrl)
-                .encodedValue(encodedStr)
-                .hashValue(extract10Char)
-                .build();
-    }
-    /**
-     * 객체가 Null인지 아닌지 확인하는 함수
-     */
-    private UrlResponseDto isEmpty(String encodedValue, Optional<Url> result) throws NotFoundException {
-        if (result.isEmpty())
-            throw new NotFoundException(encodedValue);
-        else
-            return UrlResponseDto.builder()
-                    .hashValue(result.get().getHashvalue())
-                    .originUrl(result.get().getOriginurl())
-                    .encodedValue(encodedValue)
-                    .build();
-    }
     /**
      * 64글자 중 랜덤으로 10개를 뽑아 반환
      * **/
@@ -99,21 +109,5 @@ public class UrlService {
             res += sha512.charAt(tmp);
         }
         return res;
-    }
-    /**
-     * OriginUrl이 알맞은 형식으로 들어왔는지 확인하는 로직
-     * **/
-    private String checkUrl(String originUrl) throws ValidationException {
-        int index = originUrl.indexOf("://"); //앞의 SCHEME유무 확인
-        String changedUrl = "";
-        if (index == -1)
-            originUrl = "https://" + originUrl;
-        if (validateUrl(originUrl) == false) //SCHEME없으면 인증이 안되기 때문에 앞에서 확인해줌.
-            throw new ValidationException(originUrl);
-        return originUrl;
-    }
-    private boolean validateUrl(String originUrl) {
-        UrlValidator urlValidator = new UrlValidator();
-        return urlValidator.isValid(originUrl);
     }
 }

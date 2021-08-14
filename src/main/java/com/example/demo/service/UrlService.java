@@ -45,19 +45,18 @@ public class UrlService {
         return urlCheckService.isEmpty(encodedValue, result);
     }
 
-    public UrlResponseDto createUrl(String originUrl) throws NoSuchAlgorithmException, ValidationException {
+    public UrlResponseDto createUrl(String originUrl) throws NoSuchAlgorithmException, ValidationException, UnsupportedEncodingException {
         originUrl = urlCheckService.checkUrl(originUrl);
         Url url = new Url(null,originUrl);
         urlRepository.save(url); //원래 List를 했으나 프로그램 종료 시 꼬일 수 있기 때문에 ID를 얻기 위해서 처음 save를 해줌. 
         BigInteger id = url.getId();
         String convertedBySha512 = sha512Converter.convert512(id.toString());
-        String extract10Char = pickRandom10Char(convertedBySha512);
+        String extract10Char =  randomPick10(convertedBySha512);
         url.setHashvalue(extract10Char);
-        urlRepository.save(url); //Hashing Value를 정한 후 다시 업데이트.
+        urlRepository.save(url); //Hashing Value를 정한 후 다시 업데이트.(FLUSH)
         String encodedStr = base62Converter.encoding(extract10Char);
         return makeDto.makeUrlResponseDto(originUrl, extract10Char, encodedStr);
     }
-
 
     public UrlResponseDto createUrlWithLogin(String originUrl) throws NoSuchAlgorithmException, ValidationException, UnsupportedEncodingException {
         originUrl = urlCheckService.checkUrl(originUrl);

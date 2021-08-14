@@ -1,14 +1,23 @@
-### 1. GET   :   /sa/:code
+## URL Shortener API
+
+### 1. GET   :   /{code}
 Redirect Decoded URL   
 
 <br/>
 
 
-### 2. Post   :  /{originUri}
-@@ -33,8 +34,10 @@ Post /{originUri}
-}
+### 2. Post   :  /general
+
+```
+dasdasdsadadd
+```
+<br/>
+
+### 3. Post   :  /login
+
 ```
 
+```
 <br/>
 
 
@@ -16,11 +25,13 @@ Redirect Decoded URL
 
 
 ## 사용방법
+<br/>
 
-@@ -43,7 +46,8 @@ Post /{originUri}
+### 1. Git Clone
+
+```
 git clone https://github.com/ghkdwlgns612/URI-Shortener-API.git 
 ```
-
 
 <br/>
 

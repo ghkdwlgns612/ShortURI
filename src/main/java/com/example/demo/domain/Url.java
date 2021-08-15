@@ -21,10 +21,13 @@ public class Url {
         private String hashvalue; //10글자
         @Column
         private String originurl;
+        @Column
+        private String name;
 
         @Builder
-        public Url(String hashvalue, String originurl) {
+        public Url(String hashvalue, String originurl, String name) {
                 this.hashvalue = hashvalue;
                 this.originurl = originurl;
+                this.name = name;
         }
 }

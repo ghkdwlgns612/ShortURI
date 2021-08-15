@@ -15,11 +15,13 @@ public class Base62Converter {
 
     public String encoding(String extract10Char) {
         BigInteger base10 = new BigInteger(extract10Char,16);
+        int i = 7;
         StringBuilder result = new StringBuilder();
-        while (base10 != BigInteger.valueOf(0)) {
+        while (i != 0) {
             BigInteger tmp = get62BaseString(base10);
             result.append(base62[Integer.parseInt(tmp.toString())]);
             base10 = base10.divide(BigInteger.valueOf(62));
+            i--;
         }
         return result.reverse().toString();
     }

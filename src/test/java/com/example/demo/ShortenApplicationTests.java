@@ -6,7 +6,6 @@ import com.example.demo.repository.UrlRepository;
 import com.example.demo.service.UrlService;
 import com.example.demo.utils.Base62Converter;
 import com.example.demo.utils.Sha512Converter;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,9 +33,20 @@ class ShortenApplicationTests {
 
 	private Sha512Converter sha512Converter = new Sha512Converter();
 	private Base62Converter base62Converter = new Base62Converter();
+	private Base62 base62 = new Base62();
+
 
 	@Test
-	public void getCreateInfoTest() throws ValidationException, NoSuchAlgorithmException {
+	public void get10Char() {
+		String base16Char64 = "5aadb45520dcd8726b2822a7a78bb53d794f557199d5d4abdedd2c55a4bd6ca73607605c558de3db80c8e86c3196484566163ed1327e82e8b6757d1932113cb8";
+		String res = urlService.randomPick10(base16Char64);
+		log.info(res);
+		String encoded = base62Converter.encoding("0000000001");
+		log.info(encoded);
+	}
+
+	@Test
+	public void getCreateInfoTest() throws ValidationException, NoSuchAlgorithmException, UnsupportedEncodingException {
 		UrlResponseDto url = urlService.createUrl("daum.net");
 		log.info(url.getOriginUrl());
 		log.info(url.getHashValue());
@@ -71,7 +81,8 @@ class ShortenApplicationTests {
 	public void CreateV1Test() {
 		String tenTest=  "c9b3d4812e";
 		String originUrl = "https://naver.com";
-		Url url = new Url(tenTest,originUrl);
+		String name = "jihuhwan";
+		Url url = new Url(tenTest,originUrl,name);
 		urlRepository.save(url);
 	}
 
@@ -88,5 +99,11 @@ class ShortenApplicationTests {
 		Optional<Url> result = urlRepository.findByhashvalue("345678");
 		log.info(result.get().getOriginurl());
 		log.info(result.get().getHashvalue());
+	}
+
+	@Test
+	public void exception() {
+		String encoding = base62.encoding(BigInteger.valueOf(12345));
+		log.info("encoding = {}", encoding);
 	}
 }

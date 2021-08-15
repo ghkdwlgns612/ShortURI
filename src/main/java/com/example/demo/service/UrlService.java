@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityExistsException;
 import javax.xml.bind.ValidationException;
 import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
@@ -25,7 +26,6 @@ import java.util.Optional;
 @Service
 @Slf4j
 public class UrlService {
-
     private UrlRepository urlRepository;
     private UrlCheckService urlCheckService;
     private MakeDto makeDto;
@@ -47,24 +47,28 @@ public class UrlService {
 
     public UrlResponseDto createUrl(String originUrl) throws NoSuchAlgorithmException, ValidationException {
         originUrl = urlCheckService.checkUrl(originUrl);
-        Url url = new Url(null,originUrl);
-        urlRepository.save(url); //원래 List를 했으나 프로그램 종료 시 꼬일 수 있기 때문에 ID를 얻기 위해서 처음 save를 해줌. 
-        BigInteger id = url.getId();
-        String convertedBySha512 = sha512Converter.convert512(id.toString());
-        String extract10Char = pickRandom10Char(convertedBySha512);
-        url.setHashvalue(extract10Char);
-        urlRepository.save(url); //Hashing Value를 정한 후 다시 업데이트.
+        BigInteger id = makeRandomValue(); //약 3~4%
+        String convertedBySha512 = sha512Converter.convert512(id.toString()); //약 2~3%
+        String extract10Char =  randomPick10(convertedBySha512);
+        Url url = new Url(extract10Char,originUrl,null);
+        if (urlRepository.existsByhashvalue(extract10Char)) // 약 70%
+            throw new DuplicateKeyException(extract10Char);
+        urlRepository.save(url); // 약 25%
         String encodedStr = base62Converter.encoding(extract10Char);
         return makeDto.makeUrlResponseDto(originUrl, extract10Char, encodedStr);
     }
 
-
-    public UrlResponseDto createUrlWithLogin(String originUrl) throws NoSuchAlgorithmException, ValidationException, UnsupportedEncodingException {
+    public UrlResponseDto createUrlWithLogin(String originUrl, String name) throws NoSuchAlgorithmException, ValidationException, UnsupportedEncodingException {
         originUrl = urlCheckService.checkUrl(originUrl);
         originUrl = originUrl.toLowerCase();
-        String extract10Char = makeExtract10Char(originUrl);
-        Url url = new Url(extract10Char,originUrl);
-        urlRepository.save(url);
+        String extract10Char = makeExtract10Char(originUrl); //문제 : 사용자1과 사용자2가 똑같은 값을가지면? 그럼 안된다. 어떻게 해야할까?
+        Url url = new Url(extract10Char,originUrl,name);
+        if (urlRepository.existsByname(name)) {
+            if (urlRepository.existsByoriginurl(originUrl)) { //약 70%
+                throw new EntityExistsException(originUrl);
+            }
+        }
+        urlRepository.save(url); //약 25%
         String encodedStr = base62Converter.encoding(extract10Char);
         return makeDto.makeUrlResponseDto(originUrl, extract10Char, encodedStr);
     }
@@ -75,27 +79,7 @@ public class UrlService {
     private String makeExtract10Char(String originUrl) throws UnsupportedEncodingException, NoSuchAlgorithmException {
         String encodedUtf8 = URLEncoder.encode(originUrl, "UTF-8");
         String convertedBySha512 = sha512Converter.convert512(encodedUtf8);
-        String extract10Char = makeFront10Char(originUrl, convertedBySha512);
-        return extract10Char;
-    }
-
-    /**
-     * originUrl을 해싱한 16진수 64글자 중 앞의 10글자를 추출함.
-     */
-    private String makeFront10Char(String originUrl, String convertedBySha512) {
-        String extract10Char = convertedBySha512.substring(0,10);
-        if(urlRepository.existsByhashvalue(extract10Char))
-            throw new DuplicateKeyException(originUrl);
-        return extract10Char;
-    }
-
-    /**
-     * id를 해싱한 16진수 64글자 중 랜덤 10문자를 뽑아내 40비트를 생성.
-     * **/
-    private String pickRandom10Char(String convertedBySha512) {
         String extract10Char = randomPick10(convertedBySha512);
-        while(urlRepository.existsByhashvalue(extract10Char))
-            extract10Char = randomPick10(convertedBySha512);
         return extract10Char;
     }
 
@@ -109,5 +93,9 @@ public class UrlService {
             res += sha512.charAt(tmp);
         }
         return res;
+    }
+
+    private BigInteger makeRandomValue() {
+        return new BigInteger(String.valueOf((int) (Math.random() * 10000000000.0)));
     }
 }

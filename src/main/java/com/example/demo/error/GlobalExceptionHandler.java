@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.persistence.EntityExistsException;
 import javax.xml.bind.ValidationException;
 import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
@@ -64,7 +65,17 @@ public class GlobalExceptionHandler {
         return ErrorResponse.builder()
                 .err(e.getMessage())
                 .statusCode(HttpStatus.NOT_ACCEPTABLE.value())
-                .message("이미 변환되어진 값입니다.")
+                .message("서버의 오류입니다. 다시 한 번 입력해주세요.")
+                .build();
+    }
+
+    @ExceptionHandler(EntityExistsException.class)
+    public ErrorResponse handlerEntityExistsException(Exception e) {
+        log.info(e.toString());
+        return ErrorResponse.builder()
+                .err(e.getMessage())
+                .statusCode(HttpStatus.EXPECTATION_FAILED.value())
+                .message("이미 변환된 URL입니다.")
                 .build();
     }
 }

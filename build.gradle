@@ -17,7 +17,9 @@ configurations {
 repositories {
 	mavenCentral()
 }
-
+dependencyLocking {
+	ignoredDependencies.add('com.example:*')
+}
 dependencies {
 	implementation group: 'org.springframework.data', name: 'spring-data-jpa', version: '2.5.3'
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'

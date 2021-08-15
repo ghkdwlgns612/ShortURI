@@ -9,4 +9,6 @@ import java.util.Optional;
 public interface UrlRepository extends JpaRepository<Url, Long> {
     Optional<Url> findByhashvalue(String hashvalue);
     boolean existsByhashvalue(String hashvalue);
+    boolean existsByname(String name);
+    boolean existsByoriginurl(String originurl);
 }

@@ -37,14 +37,23 @@ public class Controller {
     @CrossOrigin("*")
     @PostMapping("/general")
     public ResultResponseDto<Object> ChangeUrl(@RequestParam(required = false) String originUrl) throws NoSuchAlgorithmException, ValidationException, UnsupportedEncodingException {
+        long beforeTime = System.currentTimeMillis();
         UrlResponseDto responseDto = urlService.createUrl(originUrl);
+        long afterTime = System.currentTimeMillis();
+        long secDiffTime = (afterTime - beforeTime);
+        System.out.println("시간차이(m) : "+secDiffTime);
         return makeDto.makeResultResponseDto(responseDto);
     }
 
     @CrossOrigin("*")
     @PostMapping("/login")
-    public ResultResponseDto<Object> ChangeUrlLogin(@RequestParam(required = false) String originUrl) throws ValidationException, UnsupportedEncodingException, NoSuchAlgorithmException {
-        UrlResponseDto responseDto = urlService.createUrlWithLogin(originUrl);
+    public ResultResponseDto<Object> ChangeUrlLogin(@RequestParam(required = false) String originUrl,
+                                                    @RequestParam(required = true) String name) throws ValidationException, UnsupportedEncodingException, NoSuchAlgorithmException {
+        long beforeTime = System.currentTimeMillis();
+        UrlResponseDto responseDto = urlService.createUrlWithLogin(originUrl,name);
+        long afterTime = System.currentTimeMillis();
+        long secDiffTime = (afterTime - beforeTime);
+        System.out.println("시간차이(m) : "+secDiffTime);
         return makeDto.makeResultResponseDto(responseDto);
     }
 }

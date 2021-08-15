@@ -33,6 +33,7 @@ class ShortenApplicationTests {
 
 	private Sha512Converter sha512Converter = new Sha512Converter();
 	private Base62Converter base62Converter = new Base62Converter();
+	private Base62 base62 = new Base62();
 
 
 	@Test
@@ -80,7 +81,8 @@ class ShortenApplicationTests {
 	public void CreateV1Test() {
 		String tenTest=  "c9b3d4812e";
 		String originUrl = "https://naver.com";
-		Url url = new Url(tenTest,originUrl);
+		String name = "jihuhwan";
+		Url url = new Url(tenTest,originUrl,name);
 		urlRepository.save(url);
 	}
 
@@ -97,5 +99,11 @@ class ShortenApplicationTests {
 		Optional<Url> result = urlRepository.findByhashvalue("345678");
 		log.info(result.get().getOriginurl());
 		log.info(result.get().getHashvalue());
+	}
+
+	@Test
+	public void exception() {
+		String encoding = base62.encoding(BigInteger.valueOf(12345));
+		log.info("encoding = {}", encoding);
 	}
 }

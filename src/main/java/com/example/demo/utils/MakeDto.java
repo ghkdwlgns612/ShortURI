@@ -13,6 +13,15 @@ public class MakeDto {
                 .statusCode(HttpStatus.OK.value())
                 .build();
     }
+    public UrlResponseDto makeUrlResponseDto(String originUrl, String extract10Char, String encodedStr,String name) {
+        return UrlResponseDto.builder()
+                .originUrl(originUrl)
+                .encodedValue(encodedStr)
+                .hashValue(extract10Char)
+                .name(name)
+                .build();
+    }
+
     public UrlResponseDto makeUrlResponseDto(String originUrl, String extract10Char, String encodedStr) {
         return UrlResponseDto.builder()
                 .originUrl(originUrl)

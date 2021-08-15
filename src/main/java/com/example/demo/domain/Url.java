@@ -18,7 +18,7 @@ public class Url {
         @GeneratedValue(strategy = GenerationType.IDENTITY)
         private BigInteger id;
         @Column
-        private String hashvalue; //10글자
+        private String hashvalue;
         @Column
         private String originurl;
         @Column

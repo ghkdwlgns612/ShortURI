@@ -2,7 +2,7 @@ package com.example.demo;
 
 import com.example.demo.repository.UrlRepository;
 import com.example.demo.service.UrlCheckService;
-import com.example.demo.service.UrlService;
+import com.example.demo.service.UrlServiceImpl;
 import com.example.demo.utils.MakeDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -18,8 +18,8 @@ public class Config {
     }
 
     @Bean
-    public UrlService urlService() {
-        return new UrlService(urlRepository,urlCheckService(),makeDto());
+    public UrlServiceImpl urlService() {
+        return new UrlServiceImpl(urlRepository,urlCheckService(),makeDto());
     }
 
     @Bean

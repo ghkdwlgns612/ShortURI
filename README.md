@@ -6,17 +6,62 @@ Redirect Decoded URL
 <br/>
 
 
-### 2. Post   :  /general
+### 2. Post   :  /general/{originUri}
 
 ```
-dasdasdsadadd
+Post /general/{originUri}
+
+200
+{
+    "statusCode": 200,
+    "message": "OK",
+    "data": {
+        "hashValue": "577abc5c77",
+        "originUrl": "https://naver.com",
+        "encodedValue": "gChowKX",
+        "name": null
+    }
+}
+
+404
+{
+	"message":"유효하지 않은 URI입니다.",
+	"statusCode":404,
+	"err":"https://123"
+}
 ```
 <br/>
 
-### 3. Post   :  /login
+### 3. Post   :  /login/{originUri}&{name}
 
 ```
+Post login/{originUri}&{name}
 
+200
+{
+    "statusCode": 200,
+    "message": "OK",
+    "data": {
+        "hashValue": "004ebee35c",
+        "originUrl": "https://github.com/ghkdwlgns612/uri-shortener-api",
+        "encodedValue": "ab2zvbc",
+        "name": "jihuhwan"
+    }
+}
+
+404
+{
+	"message":"유효하지 않은 URI입니다.",
+	"statusCode":404,
+	"err":"https://123"
+}
+
+417
+{
+    "message": "이미 변환된 URL입니다.",
+    "statusCode": 417,
+    "err": "https://github.com/ghkdwlgns612/uri-shortener-api"
+}
 ```
 <br/>
 
@@ -28,6 +73,7 @@ dasdasdsadadd
 <br/>
 
 ### 1. Git Clone
+<br/>
 
 ```
 git clone https://github.com/ghkdwlgns612/URI-Shortener-API.git 
@@ -36,19 +82,11 @@ git clone https://github.com/ghkdwlgns612/URI-Shortener-API.git
 <br/>
 
 
-### 2. H2 DB설정 및 가동
-
-@@ -52,13 +56,15 @@ git clone https://github.com/ghkdwlgns612/URI-Shortener-API.git
-spring.datasource.url=jdbc:h2:tcp://localhost/~/test  
-spring.datasource.username=sa
-```
-
+### 2. DB설정 및 가동
 <br/>
 
+각 DB에 맞게 가동 후 테이블 생성(/main/resource/db/scheme.sql)
 
-**<src/main/resources/db>**
-
-sql문 실행하여 Test Data와 Table생성하기
 
 
 <br/>
@@ -56,12 +94,13 @@ sql문 실행하여 Test Data와 Table생성하기
 
 
 ### 3. 서버 가동
-@@ -69,26 +75,26 @@ Terminal창에서 위 디렉토리 경로로 이동하여 아래의 명령 실
+<br/>
+
 ```
 java -jar ShortURI.main.jar
 ```
 
-  <br/>
+<br/>
 
 
 - java 11버전이 아닐 경우
@@ -72,18 +111,13 @@ IDE환경에서 직접 Main문 Run실행.
 <br/>
 
 ### 4. Front Web 접속
+<br/>
 
-**<src/main/resources/front/index.html>**
+**<src/main/resources/general/index.html>**
 
 위의 디렉토리에서 html파일 web으로 실행   
 <br/>
 
 
-***
 
 
-
-
-<br/>
-
-### 실행결과

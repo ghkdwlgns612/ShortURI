@@ -8,6 +8,6 @@ import java.security.NoSuchAlgorithmException;
 
 public interface UrlService {
      UrlResponseDto findByHashValue(String encodedValue) throws Exception;
-     UrlResponseDto createUrl(String originUrl) throws NoSuchAlgorithmException, ValidationException
+     UrlResponseDto createUrl(String originUrl) throws NoSuchAlgorithmException, ValidationException;
      UrlResponseDto createUrlWithLogin(String originUrl, String name) throws NoSuchAlgorithmException, ValidationException, UnsupportedEncodingException;
 }

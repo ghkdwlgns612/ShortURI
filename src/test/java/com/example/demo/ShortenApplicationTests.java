@@ -44,6 +44,14 @@ class ShortenApplicationTests {
 //	}
 
 	@Test
+	public void find() {
+		Optional<Url> findUrl = urlRepository.findUrl("jihuhwan", "https://naver.com");
+		System.out.println("findUrl = " + findUrl.get().getHashvalue());
+		Optional<Url> findUrls = urlRepository.findUrl("hwang", "https://naver.com");
+		System.out.println("findUrls = " + findUrls.get().getHashvalue());
+	}
+
+	@Test
 	public void getCreateInfoTest() throws ValidationException, NoSuchAlgorithmException, UnsupportedEncodingException {
 		UrlResponseDto url = urlServiceImpl.createUrl("daum.net");
 		log.info(url.getOriginUrl());
@@ -79,7 +87,7 @@ class ShortenApplicationTests {
 	public void CreateV1Test() {
 		String tenTest=  "c9b3d4812e";
 		String originUrl = "https://naver.com";
-		String name = "jihuhwan";
+		String name = "hwang";
 		Url url = new Url(tenTest,originUrl,name);
 		urlRepository.save(url);
 	}

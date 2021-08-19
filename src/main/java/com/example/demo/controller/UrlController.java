@@ -1,15 +1,21 @@
 package com.example.demo.controller;
 
+import com.example.demo.dto.NameImgModel;
 import com.example.demo.dto.ResultResponseDto;
+import com.example.demo.dto.TokenDto;
 import com.example.demo.dto.UrlResponseDto;
 import com.example.demo.service.OauthService;
 import com.example.demo.service.UrlService;
 import com.example.demo.service.UrlServiceImpl;
 import com.example.demo.utils.MakeDto;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
@@ -25,6 +31,8 @@ public class UrlController {
     private UrlService urlService;
     private OauthService oauthService;
     private MakeDto makeDto;
+    ObjectMapper objectMapper = new ObjectMapper();
+    TokenDto tokenDto = new TokenDto();
 
     @Autowired
     public UrlController(UrlService urlService, OauthService oauthService, MakeDto makeDto) {
@@ -46,10 +54,12 @@ public class UrlController {
     }
 
     @GetMapping("/login")
-    public String CodeUrl(@RequestParam String code) {
-        log.info(code);
+    public String CodeUrl(@RequestParam String code, Model model) throws JsonProcessingException {
         ResponseEntity<String> response = oauthService.makeToken(code);
-        log.info(String.valueOf(response));
+        tokenDto = objectMapper.readValue(response.getBody(), TokenDto.class);
+        NameImgModel nameImgModel = oauthService.getModel(tokenDto.getAccess_token());
+        model.addAttribute("name",nameImgModel.getLogin());
+        model.addAttribute("image",nameImgModel.getImage_url());
         return "login1";
     }
 

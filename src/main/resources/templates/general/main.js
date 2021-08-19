@@ -31,7 +31,7 @@ function render(data) {
         let resp = data.err + "는 " + data.message;
         scroll.innerHTML += "<p id='add'>"+ resp +"</p>";
     } else {
-        let resp ="http://localhost:8080/" + data.data.encodedValue + "변환되었습니다.";
+        let resp ="http://localhost:8080/sa/" + data.data.encodedValue + "변환되었습니다.";
         scroll.innerHTML += "<p id='add'>"+ resp +"</p>";
     }
 }

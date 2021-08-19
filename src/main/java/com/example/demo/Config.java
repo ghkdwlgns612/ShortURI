@@ -1,8 +1,7 @@
 package com.example.demo;
 
 import com.example.demo.repository.UrlRepository;
-import com.example.demo.service.UrlCheckService;
-import com.example.demo.service.UrlServiceImpl;
+import com.example.demo.service.*;
 import com.example.demo.utils.MakeDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -18,7 +17,7 @@ public class Config {
     }
 
     @Bean
-    public UrlServiceImpl urlService() {
+    public UrlService urlService() {
         return new UrlServiceImpl(urlRepository,urlCheckService(),makeDto());
     }
 
@@ -30,5 +29,10 @@ public class Config {
     @Bean
     public MakeDto makeDto() {
         return new MakeDto();
+    }
+
+    @Bean
+    public OauthService oauthService() {
+        return new OauthServiceImpl();
     }
 }

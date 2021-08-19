@@ -25,7 +25,7 @@ import java.util.Optional;
 
 @Service
 @Slf4j
-public class UrlServiceImpl {
+public class UrlServiceImpl implements UrlService{
     private UrlRepository urlRepository;
     private UrlCheckService urlCheckService;
     private MakeDto makeDto;
@@ -63,6 +63,8 @@ public class UrlServiceImpl {
         originUrl = urlCheckService.checkUrl(originUrl);
         String extract10Char = makeExtract10Char(originUrl); //문제 : 사용자1과 사용자2가 똑같은 값을가지면? 그럼 안된다. 어떻게 해야할까?
         Url url = new Url(extract10Char,originUrl,name);
+        if (urlRepository.existsByhashvalue(extract10Char))
+            throw new DuplicateKeyException(extract10Char);
         if (urlRepository.existsByname(name)) {
             if (urlRepository.existsByoriginurl(originUrl)) {
                 throw new EntityExistsException(originUrl);

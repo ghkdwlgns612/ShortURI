@@ -6,3 +6,5 @@ create table urlstore (
   hashvalue varchar(255) NOT NULL,
   originurl varchar(255) NOT NULL
 )
+
+INSERT INTO urlstore (id, name,hashvalue,originurl) values (null,'jihuhhwab','abcdfffeedf','naver.com');

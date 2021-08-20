@@ -1,0 +1,13 @@
+#body {
+    display: block;
+    width : 900px;
+    margin: 0 auto;
+    background: #ddd;
+    position: relative;
+}
+
+#img {
+    border-radius: 70%;
+    width: 300px;
+    height: 300px;
+}

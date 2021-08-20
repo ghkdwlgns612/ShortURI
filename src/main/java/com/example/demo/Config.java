@@ -33,6 +33,6 @@ public class Config {
 
     @Bean
     public OauthService oauthService() {
-        return new OauthServiceImpl();
+        return new OauthServiceImpl(urlRepository);
     }
 }

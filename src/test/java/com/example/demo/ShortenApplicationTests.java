@@ -17,6 +17,7 @@ import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
 import java.net.URLEncoder;
 import java.security.NoSuchAlgorithmException;
+import java.util.List;
 import java.util.Optional;
 
 
@@ -42,6 +43,14 @@ class ShortenApplicationTests {
 //		String encoded = base62Converter.encoding("0000000001");
 //		log.info(encoded);
 //	}
+	
+	@Test
+	public void findUrlAll() {
+		List<Url> all = urlRepository.findAllUrlByName("jihuhwan");
+		for (Url url: all) {
+			log.info(url.getOriginurl());
+		}
+	}
 
 	@Test
 	public void find() {

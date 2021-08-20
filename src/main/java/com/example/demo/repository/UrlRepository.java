@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import javax.swing.text.html.Option;
+import java.util.List;
 import java.util.Optional;
 
 public interface UrlRepository extends JpaRepository<Url, Long> {
@@ -16,4 +17,6 @@ public interface UrlRepository extends JpaRepository<Url, Long> {
     boolean existsByoriginurl(String originurl);
     @Query("SELECT m FROM Url m WHERE m.name= :name and m.originurl= :originurl")
     Optional<Url> findUrl(@Param("name") String name,@Param("originurl") String originurl);
+    @Query("SELECT m FROM Url m WHERE m.name= :name")
+    List<Url> findAllUrlByName(@Param("name") String name);
 }

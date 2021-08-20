@@ -6,10 +6,8 @@ import com.example.demo.dto.TokenDto;
 import com.example.demo.dto.UrlResponseDto;
 import com.example.demo.service.OauthService;
 import com.example.demo.service.UrlService;
-import com.example.demo.service.UrlServiceImpl;
 import com.example.demo.utils.MakeDto;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,6 +38,10 @@ public class UrlController {
         this.oauthService = oauthService;
         this.makeDto = makeDto;
     }
+    @GetMapping
+    public String Home() {
+        return "general/index";
+    }
 
     @GetMapping("/sa/{code}")
     public void DirectUrl(@PathVariable String code, HttpServletResponse response) throws Exception {
@@ -48,6 +50,7 @@ public class UrlController {
     }
 
     @PostMapping("/general")
+    @ResponseBody
     public ResultResponseDto<Object> ChangeUrl(@RequestParam(required = false) String originUrl) throws NoSuchAlgorithmException, ValidationException{
         UrlResponseDto responseDto = urlService.createUrl(originUrl);
         return makeDto.makeResultResponseDto(responseDto);
@@ -57,13 +60,12 @@ public class UrlController {
     public String CodeUrl(@RequestParam String code, Model model) throws JsonProcessingException {
         ResponseEntity<String> response = oauthService.makeToken(code);
         tokenDto = objectMapper.readValue(response.getBody(), TokenDto.class);
-        NameImgModel nameImgModel = oauthService.getModel(tokenDto.getAccess_token());
-        model.addAttribute("name",nameImgModel.getLogin());
-        model.addAttribute("image",nameImgModel.getImage_url());
-        return "login1";
+        NameImgModel nameImgModel = oauthService.getModel(tokenDto.getAccess_token(), model);
+        return "login/login";
     }
 
     @PostMapping("/login")
+    @ResponseBody
     public ResultResponseDto<Object> ChangeUrlLogin(@RequestParam(required = false) String originUrl,
                                                     @RequestParam(required = true) String name) throws ValidationException, UnsupportedEncodingException, NoSuchAlgorithmException {
         UrlResponseDto responseDto = urlService.createUrlWithLogin(originUrl,name);

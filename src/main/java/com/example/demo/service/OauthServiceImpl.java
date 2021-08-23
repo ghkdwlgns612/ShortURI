@@ -2,13 +2,11 @@ package com.example.demo.service;
 
 import com.example.demo.domain.Url;
 import com.example.demo.dto.NameImgModel;
-import com.example.demo.dto.TokenDto;
 import com.example.demo.repository.UrlRepository;
+import com.example.demo.utils.Base62Converter;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
@@ -22,6 +20,7 @@ import java.util.List;
 public class OauthServiceImpl implements OauthService{
 
     private final UrlRepository urlRepository;
+    Base62Converter base62Converter = new Base62Converter();
     NameImgModel nameImgModel = new NameImgModel();
     ObjectMapper objectMapper = new ObjectMapper();
 
@@ -47,14 +46,25 @@ public class OauthServiceImpl implements OauthService{
         ResponseEntity<String> response = restTemplate.exchange(queryString, HttpMethod.GET, entity,String.class);
         nameImgModel = objectMapper.readValue(response.getBody(), NameImgModel.class);
         List<Url> urls = urlRepository.findAllUrlByName(nameImgModel.getLogin());
-        setModel(model, urls);
+        String[] res = encodingUrl(urls);
+        setModel(model, urls,res);
         return nameImgModel;
      }
 
-    private void setModel(Model model, List<Url> urls) {
+    private String[] encodingUrl(List<Url> urls) {
+        String[] ret = new String[urls.size()];
+        for(int i=0;i<urls.size();i++) {
+            String hashvalue = urls.get(i).getHashvalue();
+            ret[i] = base62Converter.encoding(hashvalue);
+        }
+        return ret;
+    }
+
+    private void setModel(Model model, List<Url> urls,String[] res) {
         model.addAttribute("name",nameImgModel.getLogin());
         model.addAttribute("image",nameImgModel.getImage_url());
         model.addAttribute("urls", urls);
+        model.addAttribute("encoding",res);
     }
 
     private HttpEntity getHttpHeader() {

@@ -1,0 +1,36 @@
+#body {
+    display: flex;
+    flex-direction: row;
+    width : 900px;
+    margin: 0 auto;
+    background: #ddd;
+    position: relative;
+    color: black;
+    text-align: center;
+}
+
+#table {
+    width: 100%;
+    text-align: center;
+}
+
+#semi {
+    text-align: center;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+}
+
+#encoding {
+    display: block;
+}
+
+#origin {
+    display: block;
+}
+
+#img {
+    border-radius: 70%;
+    width: 300px;
+    height: 300px;
+}

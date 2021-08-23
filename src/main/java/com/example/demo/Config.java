@@ -2,6 +2,7 @@ package com.example.demo;
 
 import com.example.demo.repository.UrlRepository;
 import com.example.demo.service.*;
+import com.example.demo.utils.Base62Converter;
 import com.example.demo.utils.MakeDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;

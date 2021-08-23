@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" type="text/css" href="/css/login.css">
+</head>
+<body>
+    <div id="body">
+        <div id="profile">
+            <input type="button" id="named" th:value="${name}" />
+            <img th:src="${image}" id="img"/>
+        </div>
+        <div id="table">
+            <input type="text" placeholder="URl를 입력하세요" id="input">
+            <button onclick="reqListLogin();" class="button">Create</button>
+            <div id="semi">
+                <div id="encoding">
+                    <div th:each="i : ${encoding}">
+                        <p th:text="'http://localhost:8080/sa/' + ${i}"></p>
+                    </div>
+                </div>
+                <div id="origin">
+                    <div th:each="url : ${urls}">
+                        <p th:text="${url.originurl}"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+<script src="js/mainLogin.js"></script>
+<script src="js/jquery.js"></script>
+</html>

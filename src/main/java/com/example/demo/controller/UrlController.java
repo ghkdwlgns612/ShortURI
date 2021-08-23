@@ -38,15 +38,11 @@ public class UrlController {
         this.oauthService = oauthService;
         this.makeDto = makeDto;
     }
-    @GetMapping
-    public String Home() {
-        return "general/index";
-    }
 
     @GetMapping("/sa/{code}")
     public void DirectUrl(@PathVariable String code, HttpServletResponse response) throws Exception {
         UrlResponseDto responseDto = urlService.findByHashValue(code);
-        response.sendRedirect(responseDto.getOriginUrl());
+        response.sendRedirect("/" + responseDto.getOriginUrl());
     }
 
     @PostMapping("/general")
@@ -61,7 +57,7 @@ public class UrlController {
         ResponseEntity<String> response = oauthService.makeToken(code);
         tokenDto = objectMapper.readValue(response.getBody(), TokenDto.class);
         NameImgModel nameImgModel = oauthService.getModel(tokenDto.getAccess_token(), model);
-        return "login/login";
+        return "login";
     }
 
     @PostMapping("/login")

@@ -12,17 +12,6 @@ function reqList() {
     })
 }
 
-function reqListLogin() {
-    const input = document.getElementById('input').value;
-    const name = document.getElementById('input_name').value;
-    $.ajax({
-        url:'http://localhost:8080/login'
-        , type : 'POST'
-        , data: {originUrl:input, name:name}
-        , dataType : 'json'
-        , success : function(data) {render(data)}
-    })
-}
 
 
 function render(data) {

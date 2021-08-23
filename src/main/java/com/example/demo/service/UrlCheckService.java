@@ -22,7 +22,6 @@ public class UrlCheckService {
      * OriginUrl이 알맞은 형식으로 들어왔는지 확인하는 로직
      * **/
     public String checkUrl(String originUrl) throws ValidationException {
-        System.out.println("originUrl = " + originUrl);
         int index = originUrl.indexOf("://"); //앞Q
         String changedUrl = "";
         if (index == -1)

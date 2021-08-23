@@ -13,15 +13,19 @@
             <img th:src="${image}" id="img"/>
         </div>
         <div id="table">
-            <input type="text" placeholder="URl를 입력하세요" id="input">
-            <button onclick="reqListLogin();" class="button">Create</button>
+            <div id="url">
+                <input type="text" placeholder="URl를 입력하세요" id="input">
+                <button onclick="reqListLogin();" class="button">Create</button>
+            </div>
             <div id="semi">
                 <div id="encoding">
+                    <h3>Shorten Url</h3>
                     <div th:each="i : ${encoding}">
                         <p th:text="'http://localhost:8080/sa/' + ${i}"></p>
                     </div>
                 </div>
                 <div id="origin">
+                    <h3>Origin Url</h3>
                     <div th:each="url : ${urls}">
                         <p th:text="${url.originurl}"></p>
                     </div>

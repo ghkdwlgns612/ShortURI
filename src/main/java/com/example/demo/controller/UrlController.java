@@ -41,8 +41,9 @@ public class UrlController {
 
     @GetMapping("/sa/{code}")
     public void DirectUrl(@PathVariable String code, HttpServletResponse response) throws Exception {
+        log.info("code = {}", code);
         UrlResponseDto responseDto = urlService.findByHashValue(code);
-        response.sendRedirect("/" + responseDto.getOriginUrl());
+        response.sendRedirect(responseDto.getOriginUrl());
     }
 
     @PostMapping("/general")

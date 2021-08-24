@@ -4,6 +4,7 @@ import com.example.demo.repository.UrlRepository;
 import com.example.demo.service.*;
 import com.example.demo.utils.Base62Converter;
 import com.example.demo.utils.MakeDto;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -18,13 +19,13 @@ public class Config {
     }
 
     @Bean
-    public UrlService urlService() {
-        return new UrlServiceImpl(urlRepository,urlCheckService(),makeDto());
+    public ObjectMapper objectMapper() {
+        return new ObjectMapper();
     }
 
     @Bean
-    public UrlCheckService urlCheckService() {
-        return new UrlCheckService(makeDto());
+    public Base62Converter base62Converter() {
+        return new Base62Converter();
     }
 
     @Bean
@@ -33,7 +34,18 @@ public class Config {
     }
 
     @Bean
+    public UrlService urlService() {
+        return new UrlServiceImpl(urlRepository,urlCheckService(),makeDto(),base62Converter());
+    }
+
+    @Bean
+    public UrlCheckService urlCheckService() {
+        return new UrlCheckService(makeDto());
+    }
+
+
+    @Bean
     public OauthService oauthService() {
-        return new OauthServiceImpl(urlRepository);
+        return new OauthServiceImpl(urlRepository,objectMapper(),base62Converter());
     }
 }

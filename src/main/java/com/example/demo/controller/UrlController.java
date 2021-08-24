@@ -29,14 +29,15 @@ public class UrlController {
     private UrlService urlService;
     private OauthService oauthService;
     private MakeDto makeDto;
-    ObjectMapper objectMapper = new ObjectMapper();
+    private ObjectMapper objectMapper;
     TokenDto tokenDto = new TokenDto();
 
     @Autowired
-    public UrlController(UrlService urlService, OauthService oauthService, MakeDto makeDto) {
+    public UrlController(UrlService urlService, OauthService oauthService, MakeDto makeDto, ObjectMapper objectMapper) {
         this.urlService = urlService;
         this.oauthService = oauthService;
         this.makeDto = makeDto;
+        this.objectMapper = objectMapper;
     }
 
     @GetMapping("/sa/{code}")

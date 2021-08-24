@@ -7,4 +7,6 @@ create table urlstore (
   originurl varchar(255) NOT NULL
 )
 
-INSERT INTO urlstore (id, name,hashvalue,originurl) values (null,'jihuhhwab','abcdfffeedf','naver.com');
+INSERT INTO urlstore (id, name,hashvalue,originurl) values (null,'jihuhwan','abcdfffeed','naver.com');
+INSERT INTO urlstore (id, name,hashvalue,originurl) values (null,'jihuhhwan','1234512345','daum.net');
+INSERT INTO urlstore (id, name,hashvalue,originurl) values (null,'jihuhhwan','5678956789','https://profile.intra.42.fr/');

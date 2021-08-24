@@ -19,14 +19,17 @@ import java.util.List;
 @Service
 public class OauthServiceImpl implements OauthService{
 
-    private final UrlRepository urlRepository;
-    Base62Converter base62Converter = new Base62Converter();
+    private UrlRepository urlRepository;
+    private ObjectMapper objectMapper;
+    Base62Converter base62Converter;
     NameImgModel nameImgModel = new NameImgModel();
-    ObjectMapper objectMapper = new ObjectMapper();
+
 
     @Autowired
-    public OauthServiceImpl(UrlRepository urlRepository) {
+    public OauthServiceImpl(UrlRepository urlRepository, ObjectMapper objectMapper, Base62Converter base62Converter) {
         this.urlRepository = urlRepository;
+        this.objectMapper = objectMapper;
+        this.base62Converter = base62Converter;
     }
 
     @Override

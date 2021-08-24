@@ -65,7 +65,7 @@ public class GlobalExceptionHandler {
         return ErrorResponse.builder()
                 .err(e.getMessage())
                 .statusCode(HttpStatus.NOT_ACCEPTABLE.value())
-                .message("서버의 오류입니다. 다시 한 번 입력해주세요.")
+                .message("중복 오류입니다. 다시 한 번 입력해주세요.")
                 .build();
     }
 
@@ -75,7 +75,7 @@ public class GlobalExceptionHandler {
         return ErrorResponse.builder()
                 .err(e.getMessage())
                 .statusCode(HttpStatus.EXPECTATION_FAILED.value())
-                .message("이미 변환된 URL입니다.")
+                .message("Entity가 이상합니다.")
                 .build();
     }
 }

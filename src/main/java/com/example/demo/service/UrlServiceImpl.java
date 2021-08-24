@@ -29,14 +29,15 @@ public class UrlServiceImpl implements UrlService{
     private UrlRepository urlRepository;
     private UrlCheckService urlCheckService;
     private MakeDto makeDto;
-    private Base62Converter base62Converter = new Base62Converter();
+    private Base62Converter base62Converter;
     private Sha512Converter sha512Converter = new Sha512Converter();
 
     @Autowired
-    public UrlServiceImpl(UrlRepository urlRepository, UrlCheckService urlCheckService, MakeDto makeDto) {
+    public UrlServiceImpl(UrlRepository urlRepository, UrlCheckService urlCheckService, MakeDto makeDto, Base62Converter base62Converter) {
         this.urlRepository = urlRepository;
         this.urlCheckService = urlCheckService;
         this.makeDto = makeDto;
+        this.base62Converter = base62Converter;
     }
 
     public UrlResponseDto findByHashValue(String encodedValue) throws Exception { //인코딩 된 값을 디코딩하여 DB에서 찾아 바로 리다이렉트

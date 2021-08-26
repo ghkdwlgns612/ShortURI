@@ -6,10 +6,12 @@ import com.example.demo.utils.MakeDto;
 import javassist.NotFoundException;
 import org.apache.commons.validator.routines.UrlValidator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import javax.xml.bind.ValidationException;
 import java.util.Optional;
 
+@Service
 public class UrlCheckService {
     private MakeDto makeDto;
 

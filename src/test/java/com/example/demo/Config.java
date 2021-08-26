@@ -1,6 +1,5 @@
 package com.example.demo;
 
-import com.example.demo.controller.UrlController;
 import com.example.demo.repository.UrlRepository;
 import com.example.demo.service.*;
 import com.example.demo.utils.Base62Converter;

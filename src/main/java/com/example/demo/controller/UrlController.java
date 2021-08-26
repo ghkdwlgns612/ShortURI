@@ -69,4 +69,10 @@ public class UrlController {
         UrlResponseDto responseDto = urlService.createUrlWithLogin(originUrl,name);
         return makeDto.makeResultResponseDto(responseDto);
     }
+
+    @GetMapping("/test")
+    @ResponseBody
+    public String Test() {
+        return "ok test";
+    }
 }

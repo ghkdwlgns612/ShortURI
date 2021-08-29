@@ -41,9 +41,8 @@ public class UrlController {
     }
 
     @GetMapping("/sa/{code}")
-    public void DirectUrl(@PathVariable String code, HttpServletResponse response) throws Exception {
-        log.info("code = {}", code);
-        UrlResponseDto responseDto = urlService.findByHashValue(code);
+    public void DirectUrl(@PathVariable String code, HttpServletResponse response, Model model) throws Exception {
+        UrlResponseDto responseDto = urlService.findByHashValue(code,model);
         response.sendRedirect(responseDto.getOriginUrl());
     }
 
@@ -68,11 +67,5 @@ public class UrlController {
                                                     @RequestParam(required = true) String name) throws ValidationException, UnsupportedEncodingException, NoSuchAlgorithmException {
         UrlResponseDto responseDto = urlService.createUrlWithLogin(originUrl,name);
         return makeDto.makeResultResponseDto(responseDto);
-    }
-
-    @GetMapping("/test")
-    @ResponseBody
-    public String Test() {
-        return "ok test";
     }
 }

@@ -30,6 +30,12 @@
                         <p th:text="${url.originurl}"></p>
                     </div>
                 </div>
+                <div id="count">
+                    <h3>Clicked</h3>
+                    <div th:each="url : ${urls}">
+                        <p th:text="${url.count}"></p>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

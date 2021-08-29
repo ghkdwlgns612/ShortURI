@@ -1,6 +1,5 @@
 package com.example.demo;
 
-import com.example.demo.controller.UrlController;
 import com.example.demo.repository.UrlRepository;
 import com.example.demo.service.*;
 import com.example.demo.utils.Base62Converter;
@@ -20,6 +19,19 @@ public class Config {
     }
 
     @Bean
+    public UrlService urlService() {return new UrlServiceImpl(urlRepository,urlCheckService(),makeDto(),base62Converter());}
+
+    @Bean
+    public UrlCheckService urlCheckService() {
+        return new UrlCheckService(makeDto());
+    }
+
+    @Bean
+    public OauthService oauthService() {
+        return new OauthServiceImpl(urlRepository,objectMapper(),base62Converter());
+    }
+
+    @Bean
     public ObjectMapper objectMapper() {
         return new ObjectMapper();
     }
@@ -32,21 +44,5 @@ public class Config {
     @Bean
     public MakeDto makeDto() {
         return new MakeDto();
-    }
-
-    @Bean
-    public UrlService urlService() {
-        return new UrlServiceImpl(urlRepository,urlCheckService(),makeDto(),base62Converter());
-    }
-
-    @Bean
-    public UrlCheckService urlCheckService() {
-        return new UrlCheckService(makeDto());
-    }
-
-
-    @Bean
-    public OauthService oauthService() {
-        return new OauthServiceImpl(urlRepository,objectMapper(),base62Converter());
     }
 }

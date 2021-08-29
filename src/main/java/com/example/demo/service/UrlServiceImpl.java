@@ -12,6 +12,7 @@ import org.apache.commons.validator.routines.UrlValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
+import org.springframework.ui.Model;
 
 import javax.persistence.EntityExistsException;
 import javax.xml.bind.ValidationException;
@@ -40,56 +41,69 @@ public class UrlServiceImpl implements UrlService{
         this.base62Converter = base62Converter;
     }
 
-    public UrlResponseDto findByHashValue(String encodedValue) throws Exception { //인코딩 된 값을 디코딩하여 DB에서 찾아 바로 리다이렉트
+    public UrlResponseDto findByHashValue(String encodedValue, Model model) throws Exception { //인코딩 된 값을 디코딩하여 DB에서 찾아 바로 리다이렉트
         String decodedValue = base62Converter.decoding(encodedValue);
         Optional<Url> result = urlRepository.findByhashvalue(decodedValue);
+        result.ifPresent(o -> {
+            o.setCount(o.getCount() + 1);
+            urlRepository.save(o);
+        });
         return urlCheckService.isEmpty(encodedValue, result);
     }
 
     public UrlResponseDto createUrl(String originUrl) throws NoSuchAlgorithmException, ValidationException {
         originUrl = urlCheckService.checkUrl(originUrl);
         BigInteger id = makeRandomValue(); //약 3~4%
-        String convertedBySha512 = sha512Converter.convert512(id.toString()); //약 2~3%
-        String extract10Char =  randomPick10(convertedBySha512);
-        Url url = new Url(extract10Char,originUrl,null);
-        if (urlRepository.existsByhashvalue(extract10Char)) // 약 70%
-            throw new DuplicateKeyException(extract10Char);
+        String extract10Char = encryption(id.toString());
+        Url url = new Url(extract10Char, originUrl, null);
+        duplicate10CharCheck(extract10Char);
         urlRepository.save(url); // 약 25%
         String encodedStr = base62Converter.encoding(extract10Char);
         return makeDto.makeUrlResponseDto(originUrl, extract10Char, encodedStr);
     }
 
     public UrlResponseDto createUrlWithLogin(String originUrl, String name) throws NoSuchAlgorithmException, ValidationException, UnsupportedEncodingException {
-        originUrl = originUrl.toLowerCase();
         originUrl = urlCheckService.checkUrl(originUrl);
         String extract10Char = makeExtract10Char(originUrl); //문제 : 사용자1과 사용자2가 똑같은 값을가지면? 그럼 안된다. 어떻게 해야할까?
         Url url = new Url(extract10Char,originUrl,name);
-        if (urlRepository.existsByhashvalue(extract10Char))
-            throw new DuplicateKeyException(extract10Char);
-        if (urlRepository.existsByname(name)) {
-            if (urlRepository.existsByoriginurl(originUrl)) {
-                throw new EntityExistsException(originUrl);
-            }
-        }
+        duplicate10CharCheck(extract10Char);
+        duplicateNameAndOriginUrl(originUrl, name);
         urlRepository.save(url); //약 25%
         String encodedStr = base62Converter.encoding(extract10Char);
         return makeDto.makeUrlResponseDto(originUrl, extract10Char, encodedStr,name);
     }
 
+    public void duplicateNameAndOriginUrl(String originUrl, String name) {
+        if (urlRepository.existsByname(name)) {
+            if (urlRepository.existsByoriginurl(originUrl)) {
+                throw new EntityExistsException(originUrl);
+            }
+        }
+    }
+
+    public void duplicate10CharCheck(String extract10Char) {
+        if (urlRepository.existsByhashvalue(extract10Char)) // 약 70%
+            throw new DuplicateKeyException(extract10Char);
+    }
+
     /**
      * UTF-8인코딩 -> 512SHA -> 0 ~ 10자르기를 통해 10개의 16진수문자를 추출함.
      * **/
-    private String makeExtract10Char(String originUrl) throws UnsupportedEncodingException, NoSuchAlgorithmException {
+    public String makeExtract10Char(String originUrl) throws UnsupportedEncodingException, NoSuchAlgorithmException {
         String encodedUtf8 = URLEncoder.encode(originUrl, "UTF-8");
-        String convertedBySha512 = sha512Converter.convert512(encodedUtf8);
-        String extract10Char = randomPick10(convertedBySha512);
+        String extract10Char = encryption(encodedUtf8);
         return extract10Char;
+    }
+
+    public String encryption(String encodedUtf8) throws NoSuchAlgorithmException {
+        String convertedBySha512 = sha512Converter.convert512(encodedUtf8);
+        return randomPick10(convertedBySha512);
     }
 
     /**
      * 64글자 중 랜덤으로 10개를 뽑아 반환
      * **/
-    private String randomPick10(String sha512) {
+    public String randomPick10(String sha512) {
         String res = "";
         for(int i=0;i < 10;i++) {
             int tmp = (int)(Math.random() * 60);
@@ -102,7 +116,7 @@ public class UrlServiceImpl implements UrlService{
      *
      * 난수발생시키기
      */
-    private BigInteger makeRandomValue() {
+    public BigInteger makeRandomValue() {
         return new BigInteger(String.valueOf((int) (Math.random() * 10000000000.0)));
     }
 }

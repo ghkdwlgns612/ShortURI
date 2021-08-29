@@ -34,7 +34,8 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf:2.5.3'
 // https://mvnrepository.com/artifact/org.mockito/mockito-core
 	testImplementation 'org.mockito:mockito-core:3.12.2'
-
+// https://mvnrepository.com/artifact/javax.xml.bind/jaxb-api
+	implementation 'javax.xml.bind:jaxb-api:2.3.1'
 
 
 

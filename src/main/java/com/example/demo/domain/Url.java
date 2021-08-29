@@ -23,6 +23,8 @@ public class Url {
         private String originurl;
         @Column
         private String name;
+        @Column
+        private Integer count=0;
 
         @Builder
         public Url(String hashvalue, String originurl, String name) {

@@ -1,6 +1,6 @@
 ## URL Shortener API
 
-### 1. GET   :   /{code}
+### 1. GET   :   /sa/{code}
 Redirect Decoded URL   
 
 <br/>
